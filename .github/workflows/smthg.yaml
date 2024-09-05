@@ -1,6 +1,12 @@
 name: smthg
 on:
   workflow_dispatch:
+  inputs:
+    skip_push:
+      type: boolean
+      description: 'Skip pushing to DockerHub'
+      required: false
+      default: false
 
 jobs:
   lint-and-test:
@@ -44,4 +50,5 @@ jobs:
       - name: Build docker image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/github-action-school .
       - name: Push to Dockerhub
+        if: ${{ !inputs.skip_push}}
         run: docker push ${{ secrets.DOCKER_USERNAME }}/github-action-school
